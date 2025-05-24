@@ -1,24 +1,21 @@
-# SnapBill - Smart Receipt Management System
+# SnapBill - Smart Receipt Scanner & Bill Splitter
 
-SnapBill is a modern web application built with Django that helps users manage their receipts digitally. Upload receipts, track expenses, split bills, and share receipts with others - all in one place!
+SnapBill is a Django-based application that makes splitting bills from receipts effortless. Simply snap a photo of your receipt, and SnapBill will automatically read the items and prices using OCR (Optical Character Recognition), then help you split the bill among friends.
 
-## Features
+## Core Features
 
-- 📸 **Receipt Upload**: Upload receipt images and store them digitally
-- 💰 **Bill Splitting**: Easily split bills among multiple people
-- 🔍 **Receipt History**: View and manage all your receipts in one place
-- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
-- 🔗 **Receipt Sharing**: Share receipts with others via unique links
-- 📊 **Item Tracking**: Track individual items and their prices
-- 🔒 **User Authentication**: Secure login and signup system
+- 📸 **Smart Receipt Scanning**: Take a photo or upload a receipt image
+- 🔍 **Automatic OCR**: Extract text, items, and prices using pytesseract
+- 💰 **Smart Bill Splitting**: Split bills equally or by specific items
+- 📱 **Mobile-Friendly**: Works great on both desktop and mobile devices
 
 ## Tech Stack
 
 - **Backend**: Django 5.0.2
+- **OCR Engine**: pytesseract
+- **Image Processing**: Pillow (PIL)
 - **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite (default)
-- **Styling**: Bootstrap 5, Custom CSS
-- **Icons**: Bootstrap Icons
+- **Styling**: Bootstrap 5
 
 ## Installation
 
@@ -39,26 +36,42 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Run migrations:
+4. Install Tesseract OCR:
+- macOS: `brew install tesseract`
+- Ubuntu: `sudo apt-get install tesseract-ocr`
+- Windows: Download installer from GitHub
+
+5. Run migrations:
 ```bash
 python manage.py migrate
 ```
 
-5. Start the development server:
+6. Start the development server:
 ```bash
 python manage.py runserver
 ```
 
-6. Visit `http://127.0.0.1:8000` in your browser
+7. Visit `http://127.0.0.1:8000` in your browser
 
-## Usage
+## How It Works
 
-1. **Sign Up/Login**: Create an account or log in to access your receipts
-2. **Upload Receipt**: Use the upload button to add new receipts
-3. **View Receipts**: Access your receipt history from the navigation menu
-4. **Split Bills**: Select items and split the bill among multiple people
-5. **Share Receipts**: Generate sharing links for any receipt
-6. **Mark as Paid**: Track payment status for each receipt
+1. **Snap**: Take a photo of your receipt or upload an image
+2. **Scan**: SnapBill automatically reads the text using OCR
+3. **Parse**: The system identifies items and their prices
+4. **Split**: Choose how to split the bill:
+   - Split equally among all people
+   - Split by specific items
+   - Custom split with different amounts
+
+## Project Structure
+
+- `snapbill/` - Main Django project
+- `receipts/` - Receipt processing app
+  - `ocr.py` - OCR and text processing
+  - `parser.py` - Receipt parsing logic
+  - `splitter.py` - Bill splitting algorithms
+- `static/` - Static files (CSS, JS, images)
+- `templates/` - HTML templates
 
 ## Contributing
 
@@ -74,6 +87,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
+- Tesseract OCR
 - Django Documentation
-- Bootstrap Documentation
-- All contributors and users of SnapBill 
+- Bootstrap Documentation 
