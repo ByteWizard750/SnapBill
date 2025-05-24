@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Split Bill - SnapBill{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0">Split Bill</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ split_form|crispy }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ item_form|crispy }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Add Split
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Current Splits</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Person</th>
+                                <th>Amount</th>
+                                <th>Items</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for split in splits %}
+                            <tr>
+                                <td>{{ split.person_name }}</td>
+                                <td>${{ split.amount }}</td>
+                                <td>
+                                    {% for item in split.items.all %}
+                                        {{ item.name }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Actions</h4>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'receipt_detail' receipt.id %}" class="btn btn-secondary w-100 mb-2">
+                    <i class="bi bi-arrow-left"></i> Back to Receipt
+                </a>
+                <button class="btn btn-success w-100" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Print Split
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

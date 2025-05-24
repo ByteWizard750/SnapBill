@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags receipt_extras %}
+
+{% block title %}Shared Receipt - SnapBill{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Receipt Status Card -->
+            <div class="glass-card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0 card-title">
+                        <i class="bi bi-receipt"></i> Shared Receipt
+                    </h3>
+                    <div class="receipt-status">
+                        {% if receipt.is_paid %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle"></i> Paid</span>
+                        {% else %}
+                            <span class="badge bg-warning"><i class="bi bi-clock"></i> Pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="receipt-meta mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-2"><strong>Date:</strong> {{ receipt.created_at|date:"F d, Y" }}</p>
+                                <p class="mb-2"><strong>Merchant:</strong> {{ receipt.merchant_name|default:"Unknown" }}</p>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <p class="mb-2"><strong>Total Amount:</strong></p>
+                                <h2 class="text-primary mb-0">${{ receipt.total_amount|default:"0.00" }}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-bold">{{ item.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-primary">${{ item.price }}</span></td>
+                                    <td><span class="badge bg-secondary">{{ item.quantity }}</span></td>
+                                    <td><span class="badge bg-success">${{ item.price|multiply:item.quantity|floatformat:2 }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Receipt Image Preview -->
+            {% if receipt.image %}
+            <div class="glass-card">
+                <div class="card-header">
+                    <h4 class="mb-0 card-title">
+                        <i class="bi bi-image"></i> Receipt Image
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <img src="{{ receipt.image.url }}" alt="Receipt" class="img-fluid rounded">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

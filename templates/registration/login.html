@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Login - SnapBill{% endblock %}
+{% block content %}
+<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="glass-card" style="max-width: 400px; width: 100%;">
+        <div class="card-header text-center">
+            <h2 class="card-title mb-2"><i class="bi bi-person-circle"></i> Login</h2>
+            <p class="text-muted mb-0">Sign in to your SnapBill account</p>
+        </div>
+        <div class="card-body">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="post" action="{% url 'login' %}" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Username</label>
+                    <input type="text" name="username" autofocus required class="form-control" id="id_username" placeholder="Enter your username">
+                </div>
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Password</label>
+                    <input type="password" name="password" required class="form-control" id="id_password" placeholder="Enter your password">
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <div class="text-center mt-4">
+                <p>Don't have an account? <a href="{% url 'signup' %}" class="text-primary">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
